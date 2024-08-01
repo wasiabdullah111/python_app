@@ -28,8 +28,8 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/private_key.pem
-          chmod 600 ~/.ssh/private_key.pem
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/git-key
+          chmod 600 ~/.ssh/git-key
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
@@ -37,7 +37,7 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -i ~/.ssh/private_key.pem $EC2_USER@$EC2_HOST << 'EOF'
+          ssh -i ~/.ssh/git-key -o IdentitiesOnly=yes $EC2_USER@$EC2_HOST << 'EOF'
             docker pull yourusername/python-app
             docker stop python-app || true
             docker rm python-app || true
@@ -46,3 +46,4 @@ jobs:
         env:
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_HOST: ${{ secrets.EC2_HOST }}
+

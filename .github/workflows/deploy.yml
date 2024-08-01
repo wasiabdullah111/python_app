@@ -25,7 +25,7 @@ jobs:
       - name: Push the Docker image
         run: docker push wasiabdullah111/python-app
 
-      - name: Set up SSH
+      - name: Set up the SSH
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/git-key
